@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+      {% if category %}
+           {{ categoty.description|truncatewords:155 }}
+      {% else %}
+            welcome to ABC store where you can buy different items....
+      {% endif %}
+{% endblock %}
+{% block title %}
+      {% if category %}
+           {{ category.name }} --ABC STORE
+      {% else %}
+           SEE YOUR NEW COLLECTIONS
+      {% endif %}
+{% endblock %}
+
+{% block content %}
+      {% if category %}
+           <div >
+               <div class="row row_my_class">
+                   <div class="mx-auto">
+                   <p><a href="{% url 'shop:allProdCat' %}">All products</a></p>
+               </div>
+                  </div>
+           </div>
+     {% endif %}
+<div class="mx-auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" height="100px">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/banner1.jpg' %}" alt="our products" width="1500px" height="730px">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">Our products collections</h1>
+    <p class="text-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+</p>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx-auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+            <div class="card text-center" style="">
+                <a href="{{product.get_url}}"><img class="card-image-top my_image" src="{{product.image.url}}" alt="{{product.name}}" style="width:300px;height:250px"></a>
+                 <div class="card-body">
+                     <h4>{{product.name}}</h4>
+                     <p>{{product.price}}</p>
+                 </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+       <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+         {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
